@@ -12,6 +12,8 @@
 
 <body>
 
+    <!-- INTRO SCREEN -->
+
     <div id="intro">
 
         <div id="hearts"></div>
@@ -29,48 +31,155 @@
     </div>
 
 
+    <!-- BOOK -->
+
     <div id="page">
 
         <div id="backgroundGlow"></div>
 
         <div id="darkHearts"></div>
 
-        <div class="book">
 
-            <div class="paper-page left-page">
+        <div class="book-container">
 
-                <div class="page-lines"></div>
+            <!-- BACK ARROW -->
 
-                <div class="page-content">
+            <button id="backButton" class="page-arrow">
+                ‹
+            </button>
 
-                    <p>
-                        hi im sringo and this is a test and yeha and like
-                        yeha yeheayheayheyahyehayehyaehyaehyaheyhaeyheya
-                    </p>
+
+            <!-- BOOK -->
+
+            <div class="book">
+
+
+                <!-- =========================
+                     CHAPTER PAGE
+                ========================== -->
+
+                <div class="book-spread chapter-spread">
+
+                    <div class="chapter-left">
+
+                        <div class="chapter-small">
+                            chapter 1
+                        </div>
+
+                        <h2>
+                            Introduction
+                        </h2>
+
+                    </div>
+
+
+                    <div class="chapter-right">
+
+                        <div class="chapter-decoration">
+                            ♥
+                        </div>
+
+                    </div>
+
+
+                    <div class="crease"></div>
 
                 </div>
+
+
+                <!-- =========================
+                     CONTENT PAGE
+                ========================== -->
+
+                <div class="book-spread content-spread">
+
+                    <div class="paper-page left-page">
+
+                        <div class="page-lines"></div>
+
+                        <div class="page-content">
+
+                            <p>
+                                hi im sringo and this is a test and yeha and like
+                                yeha yeheayheayheyahyehayehyaehyaehyaheyhaeyheya
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="paper-page right-page">
+
+                        <div class="page-lines"></div>
+
+                        <div class="page-content">
+
+                            <p>
+                                this is the other half of the page and this is
+                                also just some test text yeha yeheayheayheyah
+                                yehayehyaehyaehyaheyhaeyheyaheyhaeyaheyhaeyea
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="crease"></div>
+
+                </div>
+
+
+                <!-- =========================
+                     FUTURE PAGE
+                ========================== -->
+
+                <div class="book-spread test-spread">
+
+                    <div class="paper-page left-page">
+
+                        <div class="page-lines"></div>
+
+                        <div class="page-content">
+
+                            <p>
+                                this is another page!
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="paper-page right-page">
+
+                        <div class="page-lines"></div>
+
+                        <div class="page-content">
+
+                            <p>
+                                more stuff can go here later ♥
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="crease"></div>
+
+                </div>
+
 
             </div>
 
 
-            <div class="paper-page right-page">
+            <!-- FORWARD ARROW -->
 
-                <div class="page-lines"></div>
-
-                <div class="page-content">
-
-                    <p>
-                        this is the other half of the page and this is
-                        also just some test text yeha yeheayheayheyah
-                        yehayehyaehyaehyaheyhaeyheyaheyhaeyaheyhaeyea
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="crease"></div>
+            <button id="nextButton" class="page-arrow">
+                ›
+            </button>
 
         </div>
 
