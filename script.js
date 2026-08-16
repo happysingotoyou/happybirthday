@@ -14,6 +14,17 @@
    DOM REFERENCES
    ========================================================= */
 
+
+const bgMusic = new Audio("bg song.mp3");
+
+bgMusic.loop = true;
+bgMusic.volume = 0.05;
+
+document.getElementById("continueButton").addEventListener("click", () => {
+    bgMusic.play();
+});
+
+
 const intro = document.getElementById("intro");
 const continueButton = document.getElementById("continueButton");
 
@@ -62,22 +73,22 @@ if (!page) {
 const chapters = [
     {
         name: "Introduction",
-        spreads: [0, 1]
+        spreads: [0, 1, 2]
     },
 
     {
         name: "Us",
-        spreads: [2, 3]
+        spreads: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
     },
 
     {
         name: "Them",
-        spreads: [4, 5]
+        spreads: [14, 15]
     },
 
     {
         name: "Beauty",
-        spreads: [6, 7]
+        spreads: [16, 17]
     },
 
     {
@@ -290,9 +301,9 @@ const chapters = [
 
     { day: 4, text: "4: huh, that's odd, writing this while adding it to the binder, yknow while reading all that, I never thought id see the day I actually put it into something, I didn't even know I would do this, or do anything else, for all I knew it could've been a shared note with you on the notes app, or just a doc, I really don't know!! anyways yeah, I love you Nabiha, whatever you read in the past were my thoughts before sleeping, all related to you and only you, I love you. I tried my best to write them after you slept or before I slept for some days and as such some days I was simply too sleepy or so, oops! but yeah, I love youuu!" },
 
-    { day: 3, text: "hi this is day 3" },
+    { day: 3, text: "3: huh, it’s kinda crazy there’s only 3 days left, I don’t really know how the heck I’m gonna do this man it’s scary, but again it is for the love of my life sooo gotta give it all you knowww!! I love youuu, itsoka today we binged like a lot of miraculous bro LIEK A LOTTTT like 6-7 hours bro itoska i loved every seconddddd im so elepypyeksksk imissyou😢  YOUR WIFI WENT OHT SO I DIDNT GET YO PUT YOU TO SLEEP TODAY I HOPE YOU SLEPT WELL SND EASILYYY 🥺 🥺 I miss my baby you knowwww!!  ITSOKA signing out.." },
 
-    { day: 2, text: "hi this is day 2" },
+    { day: 2, text: "2: I'm nervous bro hhelp itsoka today i like finished chapter 1, 2, 4 and 6, 5 was already done so like i did alot roday and made the stickynote thingys and whatso yeha tomorrow i NEEDDD the paras from your firneds.. and liek i need to put them there imgonna actually shart its so scary aaaa yeha itsoka imissoyu!!" },
 
     { day: 1, text: "hi this is day 1" }
 ];
@@ -486,46 +497,24 @@ function buildDynamicChapters() {
 
     refreshSpreads();
 
+/* =====================================================
+   CHAPTERS 1–4
+   ===================================================== */
 
-    /* =====================================================
-       CHAPTER 1
-       ===================================================== */
+for (let chapterIndex = 0; chapterIndex <= 3; chapterIndex++) {
 
-    chapters[0].spreads = [
-        0,
-        1
-    ];
+    const chapterSpreads =
+        Array.from(
+            document.querySelectorAll(
+                `.book-spread[data-chapter-spread="${chapterIndex}"]`
+            )
+        );
 
-
-    /* =====================================================
-       CHAPTER 2
-       ===================================================== */
-
-    chapters[1].spreads = [
-        2,
-        3
-    ];
-
-
-    /* =====================================================
-       CHAPTER 3
-       ===================================================== */
-
-    chapters[2].spreads = [
-        4,
-        5
-    ];
-
-
-    /* =====================================================
-       CHAPTER 4
-       ===================================================== */
-
-    chapters[3].spreads = [
-        6,
-        7
-    ];
-
+    chapters[chapterIndex].spreads =
+        chapterSpreads.map((spread) => {
+            return spreads.indexOf(spread);
+        });
+}
 
     /* =====================================================
        CHAPTER 5
@@ -566,34 +555,6 @@ function buildDynamicChapters() {
 
     ];
 
-
-    /* =====================================================
-       CHAPTER 6
-       =====================================================
-
-       IMPORTANT:
-
-       The Chapter 6 title page already exists in the HTML.
-
-       There is NO generated Conclusion page.
-
-       This means Chapter 6 is the final page and the
-       Next button stops there.
-       ===================================================== */
-
-    const chapter6Title =
-        document.querySelector(
-            '.chapter-spread[data-chapter-spread="5"]'
-        );
-
-
-    if (!chapter6Title) {
-
-        console.error(
-            "Chapter 6 title spread could not be found."
-        );
-
-    }
 
 /* =====================================================
    CHAPTER 6
