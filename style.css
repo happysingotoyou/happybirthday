@@ -131,14 +131,21 @@ body {
     0%, 100% {
         opacity: 0.96;
         transform: scale(1);
+
+        filter:
+            drop-shadow(0 0 10px rgba(255, 105, 180, 0.55))
+            drop-shadow(0 0 22px rgba(255, 105, 180, 0.25));
     }
 
     50% {
         opacity: 1;
         transform: scale(1.008);
+
+        filter:
+            drop-shadow(0 0 18px rgba(255, 105, 180, 0.85))
+            drop-shadow(0 0 38px rgba(255, 105, 180, 0.45));
     }
 }
-
 
 /* =========================
    CONTINUE
@@ -330,6 +337,7 @@ body {
 }
 
 
+
 /* =========================
    DARK HEARTS
 ========================= */
@@ -437,7 +445,6 @@ body {
     overflow: hidden;
 }
 
-
 /* =========================
    SPREADS
 ========================= */
@@ -463,19 +470,13 @@ body {
         transform 0.45s ease;
 }
 
-.book-spread:not(.active) {
-    visibility: hidden;
-}
-
 .book-spread.active {
-    visibility: visible;
     opacity: 1;
 
     pointer-events: auto;
 
     transform: translateX(0);
 }
-
 
 /* =========================
    CHAPTER SPREAD
@@ -587,7 +588,6 @@ body {
 /* =========================
    PAGE LINES
 ========================= */
-
 .page-lines {
     position: absolute;
 
@@ -596,13 +596,10 @@ body {
     background:
         repeating-linear-gradient(
             to bottom,
-
             transparent 0px,
             transparent 31px,
-
-            #c9dced 31px,
-            #c9dced 32px,
-
+            rgba(201, 220, 237, 0.8) 31px,
+            rgba(201, 220, 237, 0.8) 32px,
             transparent 32px,
             transparent 33px
         );
