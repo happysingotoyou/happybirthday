@@ -511,9 +511,10 @@ body {
 }
 
 .chapter-small {
-    font-family:
-        "Comic Sans MS",
-        cursive;
+   font-family:
+    "Comic Sans MS",
+    Arial,
+    sans-serif;
 
     font-size: 18px;
 
@@ -529,9 +530,10 @@ body {
 .chapter-left h2 {
     margin: 0;
 
-    font-family:
-        "Comic Sans MS",
-        cursive;
+   font-family:
+    "Comic Sans MS",
+    Arial,
+    sans-serif;
 
     font-size: clamp(38px, 7vw, 70px);
 
@@ -619,8 +621,9 @@ body {
     color: #222;
 
     font-family:
-        "Comic Sans MS",
-        cursive;
+    "Comic Sans MS",
+    Arial,
+    sans-serif;
 
     font-size: 17px;
 
