@@ -1041,3 +1041,16 @@ body {
     letter-spacing: 8px;
     font-size: 20px;
 }
+
+.final-sticky-note {
+    position: absolute;
+    width: 300px;
+    height: auto;
+
+    right: 25px;
+    bottom: 25px;
+
+    transform: rotate(-5deg);
+
+    z-index: 5;
+}
