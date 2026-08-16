@@ -305,7 +305,7 @@ const chapters = [
 
     { day: 2, text: "2: I'm nervous bro hhelp itsoka today i like finished chapter 1, 2, 4 and 6, 5 was already done so like i did alot roday and made the stickynote thingys and whatso yeha tomorrow i NEEDDD the paras from your firneds.. and liek i need to put them there imgonna actually shart its so scary aaaa yeha itsoka imissoyu!!" },
 
-    { day: 1, text: "hi this is day 1" }
+    { day: 1, text: "its ok last day i just asked you for 4 words and you said eloquent balloon swimming handsome, yeah bro you got that itsoka i tink thats all!! ihopeyou had fun reading all 100 days bro i dunno  ohh you just asked me if im there ohh im scared im sharingmyscreenohhh neverind itsoka youwerelaughing at your dad yeha itsoka im uhh yehea!! oka final chapter time yeha goahed!!" }
 ];
 
 
