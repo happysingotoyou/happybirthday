@@ -513,7 +513,6 @@ body {
 .chapter-small {
     font-family:
         "Comic Sans MS",
-        "Segoe Print",
         cursive;
 
     font-size: 18px;
@@ -532,7 +531,6 @@ body {
 
     font-family:
         "Comic Sans MS",
-        "Segoe Print",
         cursive;
 
     font-size: clamp(38px, 7vw, 70px);
@@ -622,7 +620,6 @@ body {
 
     font-family:
         "Comic Sans MS",
-        "Segoe Print",
         cursive;
 
     font-size: 17px;
