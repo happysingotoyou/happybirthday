@@ -83,7 +83,7 @@ body {
     background-size: 80px 80px;
     background-position: 0 0, 40px 40px;
 
-    animation: checkerMove 4s linear infinite;
+    animation: checkerMove 8s linear infinite;
 
     pointer-events: none;
 }
@@ -108,11 +108,11 @@ body {
 
 @keyframes checkerMove {
     from {
-        background-position: 0 0, 40px 40px;
+        transform: translate3d(0, 0, 0);
     }
 
     to {
-        background-position: 80px 80px, 120px 120px;
+        transform: translate3d(80px, 80px, 0);
     }
 }
 .birthday-logo {
@@ -120,27 +120,22 @@ body {
     max-width: 90%;
     height: auto;
 
+    filter:
+        drop-shadow(0 0 12px rgba(255, 105, 180, 0.65))
+        drop-shadow(0 0 28px rgba(255, 105, 180, 0.30));
+
     animation: birthdayGlow 2.5s ease-in-out infinite;
 }
 
 @keyframes birthdayGlow {
-    0% {
-        filter:
-            drop-shadow(0 0 0px rgba(255, 105, 180, 0))
-            drop-shadow(0 0 0px rgba(255, 105, 180, 0));
+    0%, 100% {
+        opacity: 0.96;
+        transform: scale(1);
     }
 
     50% {
-        filter:
-            drop-shadow(0 0 12px rgba(255, 105, 180, 0.8))
-            drop-shadow(0 0 30px rgba(255, 105, 180, 0.6))
-            drop-shadow(0 0 55px rgba(255, 105, 180, 0.35));
-    }
-
-    100% {
-        filter:
-            drop-shadow(0 0 0px rgba(255, 105, 180, 0))
-            drop-shadow(0 0 0px rgba(255, 105, 180, 0));
+        opacity: 1;
+        transform: scale(1.008);
     }
 }
 
@@ -236,7 +231,7 @@ body {
 
     opacity: 0;
 
-    animation: floatHeart linear forwards;
+    animation: floatHeart linear infinite;
 }
 
 @keyframes floatHeart {
@@ -363,11 +358,9 @@ body {
     opacity: 0;
 
     text-shadow:
-        0 0 4px rgba(220, 45, 115, 0.65),
-        0 0 9px rgba(190, 30, 95, 0.45),
-        0 0 16px rgba(160, 20, 80, 0.30);
+        0 0 8px rgba(210, 35, 105, 0.45);
 
-    animation: darkFloatHeart linear forwards;
+    animation: darkFloatHeart linear infinite;
 }
 
 @keyframes darkFloatHeart {
@@ -470,7 +463,12 @@ body {
         transform 0.45s ease;
 }
 
+.book-spread:not(.active) {
+    visibility: hidden;
+}
+
 .book-spread.active {
+    visibility: visible;
     opacity: 1;
 
     pointer-events: auto;
@@ -1053,4 +1051,20 @@ body {
     transform: rotate(-5deg);
 
     z-index: 5;
+}
+
+/* =========================
+   MOBILE PERFORMANCE
+   ========================= */
+
+@media (max-width: 600px) {
+    .dark-heart {
+        text-shadow:
+            0 0 6px rgba(210, 35, 105, 0.40);
+    }
+
+    #backgroundGlow {
+        left: -45%;
+        right: -45%;
+    }
 }

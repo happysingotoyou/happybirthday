@@ -362,29 +362,25 @@ function setButtonState(button, enabled) {
    CREATE COUNTDOWN SPREAD
    ========================================================= */
 
-function createCountdownSpread(entry) {
+function createCountdownSpread() {
     const spread = document.createElement("div");
 
-    spread.className =
-        "book-spread content-spread";
-
+    spread.className = "book-spread content-spread";
     spread.dataset.chapter = "Countdown";
-    spread.dataset.day = String(entry.day);
+    spread.dataset.generated = "true";
 
     spread.innerHTML = `
         <div class="paper-page left-page">
             <div class="page-lines"></div>
-
             <div class="page-content">
-                <h2>Day ${entry.day}</h2>
+                <h2 class="countdown-day"></h2>
             </div>
         </div>
 
         <div class="paper-page right-page">
             <div class="page-lines"></div>
-
             <div class="page-content">
-                <p>${entry.text}</p>
+                <p class="countdown-text"></p>
             </div>
         </div>
 
@@ -404,209 +400,116 @@ function createCountdownSpread(entry) {
    ========================================================= */
 
 function buildDynamicChapters() {
-
     if (bookInitialized) {
         return;
     }
-
-    bookInitialized = true;
-
-
-    /* =====================================================
-       FIND COUNTDOWN INSERTION POINT
-       ===================================================== */
 
     const insertionPoint =
         document.getElementById("countdownInsertionPoint");
 
     if (!insertionPoint) {
-
         console.error(
             "Could not find #countdownInsertionPoint. Chapter 5 cannot be generated."
         );
-
         return;
     }
 
-
-    /* =====================================================
-       REMOVE ANY OLD GENERATED PAGES
-       ===================================================== */
-
-    document
-        .querySelectorAll(
-            '.book-spread[data-generated="true"]'
-        )
-        .forEach((spread) => {
-            spread.remove();
-        });
-
-
-    /* =====================================================
-       CREATE COUNTDOWN PAGES
-       ===================================================== */
-
-    const countdownSpreads = [];
-
+    bookInitialized = true;
 
     /*
-     * Insert the countdown pages BEFORE the insertion point.
+     * IMPORTANT PERFORMANCE CHANGE:
      *
-     * The Chapter 5 title page is already in the HTML,
-     * immediately before #countdownInsertionPoint.
+     * Chapter 5 used to create one full DOM spread for every
+     * countdown entry. That meant 100+ full-size page elements
+     * existed simultaneously.
      *
-     * Therefore the order becomes:
-     *
-     * Chapter 5 title
-     * Day 100
-     * Day 99
-     * Day 98
-     * ...
-     * Day 1
-     * Chapter 6 title
+     * We now create ONE reusable countdown spread and simply
+     * replace its text as the user moves between days.
      */
+    const countdownSpread = createCountdownSpread();
 
-    [...countdownDays]
-        .forEach((entry) => {
-
-            const spread =
-                createCountdownSpread(entry);
-
-            spread.dataset.generated = "true";
-            spread.dataset.chapter = "Countdown";
-
-            insertionPoint.parentNode.insertBefore(
-                spread,
-                insertionPoint
-            );
-
-            countdownSpreads.push(spread);
-        });
-
-
-    /* =====================================================
-       REMOVE INSERTION MARKER
-       ===================================================== */
+    insertionPoint.parentNode.insertBefore(
+        countdownSpread,
+        insertionPoint
+    );
 
     insertionPoint.remove();
 
-
-    /* =====================================================
-       REFRESH SPREAD LIST
-       ===================================================== */
-
     refreshSpreads();
 
-/* =====================================================
-   CHAPTERS 1–4
-   ===================================================== */
+    /*
+     * Chapters 1–4 use their existing HTML spreads.
+     */
+    for (let chapterIndex = 0; chapterIndex <= 3; chapterIndex++) {
+        const chapterSpreads =
+            Array.from(
+                document.querySelectorAll(
+                    `.book-spread[data-chapter-spread="${chapterIndex}"]`
+                )
+            );
 
-for (let chapterIndex = 0; chapterIndex <= 3; chapterIndex++) {
+        chapters[chapterIndex].spreads =
+            chapterSpreads.map((spread) => {
+                return spreads.indexOf(spread);
+            });
+    }
 
-    const chapterSpreads =
-        Array.from(
-            document.querySelectorAll(
-                `.book-spread[data-chapter-spread="${chapterIndex}"]`
-            )
-        );
-
-    chapters[chapterIndex].spreads =
-        chapterSpreads.map((spread) => {
-            return spreads.indexOf(spread);
-        });
-}
-
-    /* =====================================================
-       CHAPTER 5
-       =====================================================
-
-       IMPORTANT:
-
-       The Chapter 5 title page already exists in the HTML.
-
-       It is spread 8.
-
-       The countdown pages come AFTER it.
-       ===================================================== */
-
+    /*
+     * Chapter 5:
+     *
+     * [title spread, reusable countdown spread x N days]
+     *
+     * The repeated array entries are only numbers pointing to
+     * the SAME DOM element. They do not create additional pages.
+     */
     const chapter5Title =
         document.querySelector(
             '.chapter-spread[data-chapter-spread="4"]'
         );
 
-
     if (!chapter5Title) {
-
         console.error(
             "Chapter 5 title spread could not be found."
         );
+        chapters[4].spreads = [];
+    } else {
+        const titleIndex = spreads.indexOf(chapter5Title);
+        const countdownIndex = spreads.indexOf(countdownSpread);
 
+        chapters[4].spreads = [
+            titleIndex,
+            ...countdownDays.map(() => countdownIndex)
+        ];
     }
 
+    /*
+     * Chapter 6 uses its existing HTML spreads.
+     */
+    const chapter6Spreads =
+        Array.from(
+            document.querySelectorAll(
+                '.book-spread[data-chapter-spread="5"]'
+            )
+        );
 
-    chapters[4].spreads = [
-
-        spreads.indexOf(chapter5Title),
-
-        ...countdownSpreads
-            .map((spread) => {
-                return spreads.indexOf(spread);
-            })
-
-    ];
-
-
-/* =====================================================
-   CHAPTER 6
-   =====================================================
-
-   Chapter 6 has two pages, just like Chapters 1–4:
-
-   1. Chapter 6 title page
-   2. Chapter 6 content page
-
-   The existing HTML already contains both pages.
-   ===================================================== */
-
-const chapter6Spreads =
-    Array.from(
-        document.querySelectorAll(
-            '.book-spread[data-chapter-spread="5"]'
-        )
-    );
-
-
-if (chapter6Spreads.length >= 2) {
-
-    chapters[5].spreads = [
-        spreads.indexOf(chapter6Spreads[0]),
-        spreads.indexOf(chapter6Spreads[1])
-    ];
-
-} else {
-
-    console.error(
-        "Chapter 6 is missing its title or content spread."
-    );
-
-    chapters[5].spreads = [];
-}
-
-
-    /* =====================================================
-       RESET BOOK
-       ===================================================== */
+    if (chapter6Spreads.length >= 2) {
+        chapters[5].spreads = [
+            spreads.indexOf(chapter6Spreads[0]),
+            spreads.indexOf(chapter6Spreads[1])
+        ];
+    } else {
+        console.error(
+            "Chapter 6 is missing its title or content spread."
+        );
+        chapters[5].spreads = [];
+    }
 
     currentChapter = 0;
     currentChapterPage = 0;
 
-
-    /* =====================================================
-       DISPLAY FIRST PAGE
-       ===================================================== */
-
     showCurrentSpread();
 }
+
 
 /* =========================================================
    GET CURRENT SPREAD
@@ -642,6 +545,49 @@ function getCurrentSpread() {
 }
 
 
+
+
+/* =========================================================
+   UPDATE REUSABLE COUNTDOWN SPREAD
+   ========================================================= */
+
+function updateCountdownSpread(spread) {
+    if (!spread || currentChapter !== 4) {
+        return;
+    }
+
+    /*
+     * Chapter 5 page 0 is the title.
+     * Countdown day N lives at page N (1-based).
+     */
+    const countdownIndex = currentChapterPage - 1;
+
+    if (
+        countdownIndex < 0 ||
+        countdownIndex >= countdownDays.length
+    ) {
+        return;
+    }
+
+    const entry = countdownDays[countdownIndex];
+
+    const dayElement =
+        spread.querySelector(".countdown-day");
+
+    const textElement =
+        spread.querySelector(".countdown-text");
+
+    if (dayElement) {
+        dayElement.textContent = `Day ${entry.day}`;
+    }
+
+    if (textElement) {
+        textElement.textContent = entry.text;
+    }
+
+    spread.dataset.day = String(entry.day);
+}
+
 /* =========================================================
    SHOW CURRENT SPREAD
    ========================================================= */
@@ -653,6 +599,7 @@ function showCurrentSpread() {
     const currentSpread =
         getCurrentSpread();
 
+    updateCountdownSpread(currentSpread);
 
     /*
      * Hide every spread first.
@@ -1098,97 +1045,49 @@ if (continueButton) {
 
 /* =========================================================
    HEART PARTICLES
+   =========================================================
+   PERFORMANCE NOTE:
+   Hearts are now a fixed pool. The old version continuously
+   created and removed DOM nodes, which is unnecessarily heavy
+   for iPhone Safari.
    ========================================================= */
 
-function createHeart() {
-
-    if (!heartsContainer) {
+function setupHeartPool(container, className, count, minSize, sizeRange, minDuration, durationRange) {
+    if (!container) {
         return;
     }
 
-    const heart =
-        document.createElement("div");
+    const fragment = document.createDocumentFragment();
 
-    heart.classList.add(
-        "heart-particle"
-    );
+    for (let i = 0; i < count; i++) {
+        const heart = document.createElement("div");
 
-    heart.textContent = "♥";
+        heart.className = className;
+        heart.textContent = "♥";
 
-    heart.style.left =
-        Math.random() * 100 + "%";
+        const duration =
+            minDuration + Math.random() * durationRange;
 
-    heart.style.fontSize =
-        (12 + Math.random() * 18) + "px";
+        heart.style.left =
+            Math.random() * 100 + "%";
 
-    heart.style.animationDuration =
-        (6 + Math.random() * 7) + "s";
+        heart.style.fontSize =
+            (minSize + Math.random() * sizeRange) + "px";
 
-    heart.style.animationDelay =
-        Math.random() * 2 + "s";
+        heart.style.animationDuration =
+            duration + "s";
 
-    heartsContainer.appendChild(
-        heart
-    );
+        /*
+         * Negative delays make the pool look populated immediately
+         * instead of making every heart start at the bottom together.
+         */
+        heart.style.animationDelay =
+            -(Math.random() * duration) + "s";
 
-
-    heart.addEventListener(
-        "animationend",
-        () => {
-            heart.remove();
-        },
-        {
-            once: true
-        }
-    );
-}
-
-
-/* =========================================================
-   DARK HEART PARTICLES
-   ========================================================= */
-
-function createDarkHeart() {
-
-    if (!darkHeartsContainer) {
-        return;
+        fragment.appendChild(heart);
     }
 
-    const heart =
-        document.createElement("div");
-
-    heart.classList.add(
-        "dark-heart"
-    );
-
-    heart.textContent = "♥";
-
-    heart.style.left =
-        Math.random() * 100 + "%";
-
-    heart.style.fontSize =
-        (11 + Math.random() * 15) + "px";
-
-    heart.style.animationDuration =
-        (7 + Math.random() * 8) + "s";
-
-    heart.style.animationDelay =
-        Math.random() * 3 + "s";
-
-    darkHeartsContainer.appendChild(
-        heart
-    );
-
-
-    heart.addEventListener(
-        "animationend",
-        () => {
-            heart.remove();
-        },
-        {
-            once: true
-        }
-    );
+    container.appendChild(fragment);
 }
 
 
@@ -1196,26 +1095,29 @@ function createDarkHeart() {
    HEART GENERATION
    ========================================================= */
 
-setInterval(
-    createHeart,
-    250
+/*
+ * Keep a small, permanent pool instead of creating/removing
+ * elements every 250ms.
+ */
+setupHeartPool(
+    heartsContainer,
+    "heart-particle",
+    12,
+    12,
+    18,
+    6,
+    7
 );
 
-
-for (let i = 0; i < 25; i++) {
-    createHeart();
-}
-
-
-setInterval(
-    createDarkHeart,
-    250
+setupHeartPool(
+    darkHeartsContainer,
+    "dark-heart",
+    16,
+    11,
+    15,
+    7,
+    8
 );
-
-
-for (let i = 0; i < 35; i++) {
-    createDarkHeart();
-}
 
 
 /* =========================================================
